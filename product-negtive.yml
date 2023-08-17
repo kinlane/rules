@@ -1,0 +1,407 @@
+# Product Rules - Essential - Negative
+# These are Spectral rules that get applied at the product scope, walking through what needs to be done when building a product, but then also linting the end result to ensure a compliant schema.
+
+rules:
+
+  #-------------------------
+  # Policy - Product - Name
+  #-------------------------
+
+  product-v1-name:
+
+    description: Product Name
+    message: A product should have a descriptive name.
+    documentationUrl: https://bbgithub.dev.bloomberg.com/webapi/rules
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: name
+      function: truthy
+
+  product-v1-name-upper-case:
+
+    description: Product Name Upper Case
+    message: The product name needs have the first letter of each word upper case.
+    documentationUrl: https://bbgithub.dev.bloomberg.com/webapi/rules
+    given: "$.name"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-z]*(?: [A-Z][a-z]*)*$"
+    type: style
+    recommended: true
+    severity: error
+
+  product-v1-name-max-length:
+
+    description: Product Name Max Length
+    message: The product name should not be more than 50 characters.
+    documentationUrl: https://bbgithub.dev.bloomberg.com/webapi/rules
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: name
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Product - Description
+  #------------------
+
+  product-v1-description:
+
+    description: Product Description
+    message: A product should have a descriptive description.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: description
+      function: truthy
+
+  product-v1-description-max-length:
+
+    description: Product Description Max Length
+    message: The product description should not be more than 50 characters.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Product - Owners
+  #------------------
+
+  product-v1-owners:
+
+    description: Owners
+    message: There should be an owners property.
+    severity: error
+    given: "$"
+    then:
+    - field: owners
+      function: truthy
+
+  product-v1-owners-one:
+
+    description: Owners One
+    message: There should be at least one owner.
+    given: "$"
+    severity: error
+    then:
+      field: owners
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  product-v1-owners-pwho:
+
+    description: Owners PWHO
+    message: Each owner should have a pwho property.
+    severity: error
+    given: "$.owners.*"
+    then:
+    - field: pwho
+      function: truthy
+
+ #------------------
+  # Policy - Product - Use Case
+  #------------------
+
+  product-v1-use-cases:
+
+    description: Use Cases
+    message: There should be an use case property.
+    severity: error
+    given: "$"
+    then:
+    - field: use_cases
+      function: truthy
+
+  product-v1-use-cases-one:
+
+    description: Use Cases One
+    message: There should be at least one use case.
+    given: "$"
+    severity: error
+    then:
+      field: use_cases
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Product - Specs
+  #------------------
+
+  product-v1-specs:
+
+    description: Specs
+    message: There should be an specs property.
+    severity: error
+    given: "$"
+    then:
+    - field: specs
+      function: truthy
+
+  product-v1-specs-one:
+
+    description: Specs One
+    message: There should be at least one specs.
+    given: "$"
+    severity: error
+    then:
+      field: specs
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Product - Routes
+  #------------------
+
+  product-v1-routes:
+
+    description: Routes
+    message: There should be an routes property.
+    severity: error
+    given: "$"
+    then:
+    - field: routes
+      function: truthy
+
+  product-v1-routes-one:
+
+    description: Routes One
+    message: There should be at least one routes.
+    given: "$"
+    severity: error
+    then:
+      field: routes
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Product - Versions
+  #------------------
+
+  product-v1-versions:
+
+    description: Versions
+    message: There should be an versions property.
+    severity: error
+    given: "$"
+    then:
+    - field: versions
+      function: truthy
+
+  product-v1-versions-one:
+
+    description: Versions One
+    message: There should be at least one versions.
+    given: "$"
+    severity: error
+    then:
+      field: versions
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - product - Documents
+  #------------------
+
+  product-v1-documents:
+
+    description: Documents
+    message: There should be an documents property.
+    severity: error
+    given: "$"
+    then:
+    - field: documents
+      function: truthy
+
+  product-v1-documents-one:
+
+    description: Documents One
+    message: There should be at least one documents.
+    given: "$"
+    severity: error
+    then:
+      field: documents
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  product-v1-documents-name:
+
+    description: Documents Name
+    message: Each document should have a name.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: name
+        function: truthy
+
+  product-v1-documents-description:
+
+    description: Documents Description
+    message: Each document should have a description.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: description
+        function: truthy
+
+  product-v1-documents-type:
+
+    description: Documents Type
+    message: Each document should have a type.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: type
+        function: truthy
+
+  product-v1-documents-type-specific:
+
+    description: Documents Type
+    message: There is getting started or functional document.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: type
+        function: pattern
+        functionOptions:
+          match: /^(Getting Started|Functional)$/i
+
+
+ #------------------
+  # Policy - Product - Regions
+  #------------------
+
+  product-v1-regions:
+
+    description: Regions
+    message: There should be an regions property.
+    severity: error
+    given: "$"
+    then:
+    - field: regions
+      function: truthy
+
+  product-v1-regions-one:
+
+    description: Regions One
+    message: There should be at least one regions.
+    given: "$"
+    severity: error
+    then:
+      field: regions
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Product - Scores
+  #------------------
+
+  product-v1-scores:
+
+    description: Scores
+    message: There should be an scores property.
+    severity: error
+    given: "$"
+    then:
+    - field: scores
+      function: truthy
+
+  product-v1-scores-one:
+
+    description: Scores One
+    message: There should be at least one scores.
+    given: "$"
+    severity: error
+    then:
+      field: scores
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Product - Reviews
+  #------------------
+
+  product-v1-reviews:
+
+    description: Reviews
+    message: There should be an reviews property.
+    severity: error
+    given: "$"
+    then:
+    - field: reviews
+      function: truthy
+
+  product-v1-reviews-one:
+
+    description: Reviews One
+    message: There should be at least one reviews.
+    given: "$"
+    severity: error
+    then:
+      field: reviews
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Product - Tags
+  #------------------
+
+  product-v1-tags:
+
+    description: Tags
+    message: There should be an tags property.
+    severity: error
+    given: "$"
+    then:
+    - field: tags
+      function: truthy
+
+  product-v1-tags-one:
+
+    description: Tags One
+    message: There should be at least one tag.
+    given: "$"
+    severity: error
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    type: style

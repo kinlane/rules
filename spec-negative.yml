@@ -1,0 +1,989 @@
+## OpenAPI
+## This is a Spectral rule set for linting the OpenAPI specifications.
+
+rules:
+
+  # OpenAPI
+
+  openapi-v3-openapi-version:
+
+    description: Ensuring that a specific version of OpenAPI is being used.
+    message: You do not have the right version of OpenAPI.
+    severity: error
+    given: "$"
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: 3.0.0
+
+  # INFO
+
+  openapi-v3-info-title:
+
+    description: Ensures that all OpenAPIs have a information object title.
+    message: The info object should have a title.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: title
+      function: truthy
+
+  openapi-v3-info-title-upper-case:
+    description: Ensures that all OpenAPIs information title are upper case.
+    message: The info object title needs have the first letter of each word upper case.
+    given: "$.info.title"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-z]*(?: [A-Z][a-z]*)*$"
+    type: style
+    recommended: true
+    formats:
+    - oas3
+    severity: error
+
+  openapi-v3-info-title-max-length:
+    description: Ensures that all OpenAPIs information titles are not longer than 50
+      characters.
+    message: The info object title should not be more than 50 characters.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: title
+      function: length
+      functionOptions:
+        max: 50
+
+  openapi-v3-info-description:
+    description: Ensures that all OpenAPIs have a information description.
+    message: The info object should have a description.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: description
+      function: truthy
+
+  openapi-v3-info-description-max-length:
+    description: Ensures that all APIs descriptions are under a specific length.
+    message: The info object description should be less than 250 characters.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 500
+
+
+  openapi-v3-info-contact:
+    description: Ensures that all APIs have contact information.
+    message: API must have a contact information available.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: contact
+      function: truthy
+
+  openapi-v3-info-contact-name:
+    description: Ensures that all APIs have contact name.
+    message: API must have a contact name available.
+    given: "$.info.contact"
+    severity: error
+    then:
+      field: name
+      function: truthy
+
+  openapi-v3-info-contact-url:
+    description: Ensures that all APIs have contact URL.
+    message: API must have a contact URL available.
+    given: "$.info.contact"
+    severity: error
+    then:
+      field: url
+      function: truthy
+
+  openapi-v3-info-contact-email:
+    description: Ensures that all APIs have contact email.
+    message: API must have a contact email available.
+    given: "$.info.contact"
+    severity: error
+    then:
+      field: email
+      function: truthy
+
+  openapi-v3-info-license:
+    description: Ensures that all OpenAPIs have a information object license.
+    message: The info object should have a license.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: license
+      function: truthy
+
+  openapi-v3-info-license-name:
+    description: Ensures that all OpenAPIs have a information object license name.
+    message: The info object should have a license name.
+    given: "$.info.license"
+    severity: error
+    then:
+      field: name
+      function: truthy
+
+  openapi-v3-info-license-url:
+    description: Ensures that all OpenAPIs have a information object license url.
+    message: The info object should have a license url.
+    given: "$.info.license"
+    severity: error
+    then:
+      field: url
+      function: truthy
+
+  openapi-v3-info-terms-of-service:
+    description: Ensures that all OpenAPIs have a information object terms of service.
+    message: The info object should have a terms of service.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: termsOfService
+      function: truthy
+
+  openapi-v3-info-version:
+    description: Ensures that all OpenAPIs have a information object version.
+    message: The info object should have a version.
+    given: "$.info"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: version
+      function: truthy
+
+  openapi-v3-version-semantic:
+    description: Ensuring that semantic versioning is being used.
+    message: You need to provide a semantic version.
+    severity: error
+    recommended: true
+    given: "$.info.version"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[0-9]+.[0-9]+.[0-9]+(-[a-z0-9+.-]+)?"
+
+  openapi-v3-version-header:
+    description: Version Header
+    message: The version of an API should be communicated using an HTTP header for 'api-version', avoiding referencing version in the path of the API request.
+    documentationUrl: https://example.com
+    severity: error
+    given:
+      - "$.paths.*.*.parameters[?(@.in=='header')]"
+    then:
+      field: name
+      function: truthy
+
+  openapi-v3-version-latest-header:
+    description: Version Latest Header
+    message: The last version of an API should be communicated using an HTTP header for 'latest-api-version', avoiding referencing version in the path of the API request.
+    documentationUrl: https://example.com
+    severity: error
+    given:
+      - "$.paths.*.*.parameters[?(@.in=='header')]"
+    then:
+      field: name
+      function: truthy
+
+# Paths
+
+  openapi-v3-do-not-use-api-for-base-path:
+    description: Ensures that paths do not use /api as part of the base path.
+    message: You should not use /api as part of your base path.
+    severity: warn
+    given: "$.paths.*~"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^/api"
+
+  ## openapi-v3-path-part-one-domain:  CREATE
+
+  openapi-v3-no-trailing-slash-on-paths:
+    description: Ensures that there are no trailing slashes on paths.
+    message: There should be no trailing slashes on paths.
+    severity: error
+    given: "$.paths.*~"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/$"
+
+# Request Bodies
+
+  openapi-v3-no-request-body-on-get:
+    description: Ensures that GET methods do not have request bodies.
+    message: Your GET methods should not have request bodies.
+    given: "$.paths.*.get"
+    recommended: true
+    severity: error
+    then:
+      field: requestBody
+      function: falsy
+
+  openapi-v3-no-request-body-on-delete:
+    description: Ensures that DELETE methods do not have request bodies.
+    message: Your DELETE methods should not have request bodies.
+    given: "$.paths.*.delete"
+    recommended: true
+    severity: error
+    then:
+      field: requestBody
+      function: falsy
+
+  openapi-v3-request-bodies-required-property:
+    description: Request Bodies Have Required Property
+    message: Request bodies should possess a required property.
+    documentationUrl: https://example.com
+    severity: error
+    given: "$.paths.*.requestBody"
+    then:
+      field: required
+      function: falsy
+
+# Operations
+
+  openapi-v3-operations-summary:
+    description: Ensures that each of the operations for an API have a summary.
+    message: All of your operations need summaries.
+    severity: error
+    given: "$.paths.*[get,post,patch,put,delete]"
+    then:
+    - field: summary
+      function: truthy
+
+  openapi-v3-operations-summary-length:
+    description: Ensures that each of the operations summaries are not too long.
+    message: Your operations summaries can't be longer than 50 characters.
+    given: "$.paths.*[get,post,patch,put,delete]"
+    recommended: true
+    then:
+    - field: summary
+      function: length
+      functionOptions:
+        max: 50
+    type: style
+
+  openapi-v3-operations-summary-period-none:
+    severity: error
+    description: Ensures that each of the operations summaries do not have an ending
+      period.
+    message: Your operations summaries should not end with a period.
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "\\.$"
+
+  openapi-v3-operations-description:
+    description: Ensures that each of the operations have a description.
+    message: Your operations all need descriptions.
+    severity: error
+    given: "$.paths.*[get,post,patch,put,delete]"
+    then:
+    - field: description
+      function: truthy
+
+  openapi-v3-operations-description-length:
+    description: Ensures that the description for operations are not too long.
+    message: Your operation descriptions should not be more than 250 characters.
+    given: "$.paths.*[get,post,patch,put,delete]"
+    recommended: true
+    then:
+    - field: description
+      function: length
+      functionOptions:
+        max: 250
+    type: style
+
+  openapi-v3-operations-operation-ids:
+    description: Operation IDs
+    message: All operations should possess an operationId property.
+    documentationUrl: https://example.com
+    severity: error
+    given: "$.paths.*[get,post,patch,put,delete]"
+    then:
+    - field: operationId
+      function: truthy
+
+  openapi-v3-operations-operation-ids-camel-case:
+    description: Ensures that each of the operations IDs are camel case.
+    message: Your operations IDs need to be camel case.
+    given: "$.paths.*[get,post,patch,put,delete].operationId"
+    recommended: true
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+    type: style
+
+  openapi-v3-operations-tags:
+    description: Ensures that each of the operations have a tags property.
+    message: All of your operations need to have tags.
+    severity: error
+    given: "$.paths.*[get,post,patch,put,delete]"
+    then:
+    - field: tags
+      function: truthy
+
+  openapi-v3-operations-tags-one:
+    description: Ensures that each of the operations have at least one tag.
+    message: All of your operations need to have at least one tag.
+    given: "$"
+    severity: error
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+# Parameters
+
+  openapi-v3-parameters-name:
+    description: Ensures that that all parameters have a name.
+    message: Your parameter should all have names.
+    given: "$.paths.*.*.parameters[?(@.in=='query')]"
+    then:
+      field: name
+      function: truthy
+
+  openapi-v3-parameters-name-length:
+    description: Ensures that that parameter names aren't too long.
+    message: Your parameter names should not be longer than 25 characters.
+    given: "$.paths.*.*.parameters[?(@.in=='query')].name"
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 25
+
+  openapi-v3-parameters-name-snake-case:
+    description: Ensures that that all parameter names are snake case.
+    message: Your parameter names should all be snake case.
+    given:
+
+      - "$.paths.*.*.parameters.*[?(@.in=='query')].name"
+      - "$.components.parameters.*"
+
+    then:
+      field: name
+      function: casing
+      functionOptions:
+        type: snake
+
+  openapi-v3-parameters-in:
+    description: Ensures that that all parameters have an in property.
+    message: Your parameters all need to have in properties.
+    given:
+
+      - "$.paths.*.*.parameters.*.name"
+      - "$.components.parameters.*"
+
+    then:
+      field: in
+      function: truthy
+
+  openapi-v3-parameters-required:
+    description: Parameters Required
+    message: All properties should have a required property.
+    documentationUrl: https://example.com
+    severity: error
+    given:
+
+      - "$.paths.*.*.parameters.*[?(@.in=='query')]"
+      - "$.components.parameters.*[?(@.in=='query')]"
+
+    then:
+      field: required
+      function: truthy
+
+  openapi-v3-parameters-description:
+    description: Ensures that that all parameters have a descriptions.
+    message: Your parameters all need descriptions.
+    given: "$.paths.*.*.parameters[?(@.in=='query')]"
+    then:
+      field: description
+      function: truthy
+
+  openapi-v3-parameters-description-length:
+    description: Ensures that each of parameter description isn't too long.
+    message: Your parameter descriptions can't be more than 500 characters.
+    given: "$.paths.*.*.parameters[?(@.in=='query')].description"
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 500
+
+  openapi-v3-parameters-schema:
+    description: Ensures that that all parameters have a schema.
+    message: Your parameter should all have a schema defined.
+    given: "$.paths.*.*.parameters[?(@.in=='query')]"
+    then:
+      field: schema
+      function: truthy
+
+  openapi-v3-parameters-schema-type:
+    description: Ensures that that all parameters have a schema type.
+    message: Your parameter should all schema types.
+    given: "$.paths.*.*.parameters[?(@.in=='query')].schema"
+    then:
+      field: type
+      function: truthy
+
+  openapi-v3-parameters-schema-type-array:
+    description: Ensures that that all parameters of schema type array have items defined.
+    message: Your parameter schema should have an items property if it is an array.
+    given: "$.paths.*.*.parameters[?(@.in=='query')].schema[?(@.type=='array')]"
+    then:
+      field: items
+      function: truthy
+
+  # GET
+
+  openapi-v3-response-get-200-status-code:
+    description: Ensures GET operations have a 200 status code response.
+    message: A GET operation should have a 200 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].get.responses"
+    then:
+      field: '200'
+      function: truthy
+
+  openapi-v3-response-get-200-media-type:
+    description: Ensuring GET operations have an application/json media type for 200
+      responses.
+    message: A GET operation should have an application/json media type for 200 response.
+    severity: error
+    given: "$paths.get.responses.200.content"
+    then:
+      field: application/json
+      function: truthy
+
+  openapi-v3-response-get-404-status-code:
+    description: Ensures GET operations have a 404 status code response.
+    message: A GET operation should have a 404 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].get.responses"
+    then:
+      field: '404'
+      function: truthy
+
+  openapi-v3-response-get-500-status-code:
+    description: Ensures GET operations have a 500 status code response.
+    message: A GET operation should have a 500 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].get.responses"
+    then:
+      field: '500'
+      function: truthy
+
+  # POST
+
+  openapi-v3-request-body-on-post:
+    description: Ensures that POST methods have request bodies.
+    message: Your POST methods should have request bodies.
+    given: "$.paths.*.post"
+    recommended: true
+    severity: error
+    then:
+      field: requestBody
+      function: truthy
+
+  openapi-v3-request-body-json-media-type-on-post:
+    description: Ensures that POST methods have request bodies.
+    message: Your POST methods should have request bodies.
+    given: "$.paths.*.post[requestBody].content"
+    recommended: true
+    severity: error
+    then:
+      field: application/json
+      function: truthy
+
+  openapi-v3-response-post-201-status-code:
+    description: Ensures POST operations have a 201 status code response.
+    message: A POST operation should have a 201 status code for the response.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.paths[*].post.responses"
+    then:
+      field: '201'
+      function: truthy
+
+  openapi-v3-response-post-201-media-type:
+    severity: error
+    description: POST responses should have a JSON body.
+    given: "$paths.post.responses.201.content"
+    then:
+      field: application/json
+      function: truthy
+
+  openapi-v3-response-post-404-status-code:
+    description: Ensures POST operations have a 404 status code response.
+    message: A POST operation should have a 404 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].post.responses"
+    then:
+      field: '404'
+      function: truthy
+
+  openapi-v3-response-post-500-status-code:
+    description: Ensures POST operations have a 500 status code response.
+    message: A POST operation should have a 500 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].post.responses"
+    then:
+      field: '500'
+      function: truthy
+
+  # PUT
+
+  openapi-v3-request-body-on-put:
+    description: Ensures that PUT methods have request bodies.
+    message: Your PUT methods should have request bodies.
+    given: "$.paths.*.put"
+    recommended: true
+    severity: error
+    then:
+      field: requestBody
+      function: truthy
+
+  openapi-v3-request-body-json-media-type-on-put:
+    description: Ensures that PUT methods have request bodies.
+    message: Your PUT methods should have request bodies.
+    given: "$.paths.*.put[requestBody].content"
+    recommended: true
+    severity: error
+    then:
+      field: application/json
+      function: truthy
+
+  openapi-v3-response-put-200-status-code:
+    description: Ensures PUT operations have a 200 status code response.
+    message: A PUT operation should have a 200 status code for the response.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.paths[*].get.responses"
+    then:
+      field: '200'
+      function: truthy
+
+  openapi-v3-response-put-200-media-type:
+    description: Ensuring PUT operations have an application/json media type for 200
+      responses.
+    message: A PUT operation should have an application/json media type for 200 response.
+    severity: error
+    given: "$paths.get.responses.200.content"
+    then:
+      field: application/json
+      function: truthy
+
+  openapi-v3-response-put-404-status-code:
+    description: Ensures PUT operations have a 404 status code response.
+    message: A PUT operation should have a 404 status code for the response.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.paths[*].get.responses"
+    then:
+      field: '404'
+      function: truthy
+
+  openapi-v3-response-put-500-status-code:
+    description: Ensures PUT operations have a 500 status code response.
+    message: A PUT operation should have a 500 status code for the response.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.paths[*].put.responses"
+    then:
+      field: '500'
+      function: truthy
+
+  # DELETE
+
+  openapi-v3-response-delete-204-status-code:
+    description: Ensures DELETE operations have a 204 status code response.
+    message: A DELETE operation should have a 204 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].delete.responses"
+    then:
+      field: '204'
+      function: truthy
+
+  openapi-v3-response-delete-204-no-body:
+    description: Ensures DELETE operations do not have a response body.
+    message: A DELETE operation should not have a response body.
+    severity: error
+    given: "$paths.delete.responses.204"
+    then:
+      field: content
+      function: falsy
+
+  openapi-v3-response-delete-404-status-code:
+    description: Ensures DELETE operations have a 404 status code response.
+    message: A DELETE operation should have a 404 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].delete.responses"
+    then:
+      field: '404'
+      function: truthy
+
+  openapi-v3-response-delete-500-status-code:
+    description: Ensures DELETE operations have a 500 status code response.
+    message: A DELETE operation should have a 500 status code for the response.
+    severity: warn
+    formats:
+    - oas2
+    - oas3
+    given: "$.paths[*].delete.responses"
+    then:
+      field: '500'
+      function: truthy
+
+  # Schema
+
+  openapi-v3-schema-names-pascal-case:
+    description: Ensure all schema names are pascal case.
+    message: Schema names should be pascal case.
+    severity: error
+    given: "$.components.schemas"
+    then:
+      field: "@key"
+      function: casing
+      functionOptions:
+        type: pascal
+
+  openapi-v3-schema-names-length:
+    description: Ensure schema names should be no more than 25 characters.
+    message: All schema names should be less than 25 characters.
+    severity: error
+    given: "$.components.schemas"
+    then:
+      field: "@key"
+      function: length
+      functionOptions:
+        max: 25
+
+  openapi-v3-schema-description:
+    description: Ensure all schema properties should have a description.
+    message: All schema should have descriptions.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.components.schemas.*"
+    then:
+      field: description
+      function: truthy
+
+  openapi-v3-schema-description-length:
+    description: All schemas descriptions should be shorter than 250 characters.
+    message: Description needs to be less than 250 characters.
+    severity: warn
+    formats:
+    - oas3
+    given: "$.components.schemas.*"
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 250
+
+  openapi-v3-schema-type:
+    description: Ensuring that all schema have a type property.
+    message: All schema should have a type property.
+    severity: error
+    formats:
+    - oas3
+    given: "$.components.schemas.*"
+    then:
+      field: type
+      function: truthy
+
+  openapi-v3-schema-required:
+    description: Ensuring that all schema have a required property.
+    message: All of your schema need to have a required property.
+    severity: warn
+    formats:
+    - oas3
+    given:
+
+      - $.components.schemas.*.*[?(@.type=="object")]
+
+    then:
+      field: required
+      function: truthy
+
+  # Schema Properties
+
+
+  openapi-v3-schema-properties:
+    description: Ensuring that all schema should have properties.
+    message: All of your schema need to have properties.
+    severity: error
+    formats:
+    - oas3
+    given:
+
+      - "$.components.schemas.*[?(@.in=='object')]"
+
+    then:
+      field: properties
+      function: truthy
+
+  openapi-v3-schema-properties-type:
+    description: Ensuring that all schemas properties should have a type.
+    message: All schema properties should have type property.
+    severity: warn
+    formats:
+    - oas3
+    given: "$..properties.*"
+    then:
+      field: type
+      function: truthy
+
+  openapi-v3-schema-properties-names-camel-case:
+    description: Ensuring that schema property names are camel case.
+    message: All schema property names should be camel case.
+    severity: error
+    given: "$..properties.*"
+    then:
+      field: "@key"
+      function: casing
+      functionOptions:
+        type: camel
+
+  openapi-v3-schema-properties-names-length:
+    description: Ensuring that property names are no more than 25 characters.
+    message: Schema property names should be less than 25 characters .
+    severity: error
+    given: "$..properties.*"
+    then:
+      field: "@key"
+      function: length
+      functionOptions:
+        max: 25
+
+  openapi-v3-schema-properties-descriptions:
+    description: Ensure that all schemas properties should have a description.
+    message: All schema properties should have descriptions.
+    severity: warn
+    formats:
+    - oas3
+    given: "$..properties.*"
+    then:
+      field: description
+      function: truthy
+
+  openapi-v3-schema-properties-descriptions-length:
+    description: Ensure that schema descriptions aren't too long.
+    message: The schema description length needs to be less than 250 characters.
+    severity: warn
+    formats:
+    - oas3
+    given: "$..properties.*"
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 250
+
+  openapi-v3-schema-properties-allowed-integer-format:
+    description: Requires integer properties to have a format of int32 or int64.
+    message: Type format should be be int32 or int64.
+    formats:
+    - oas3
+    severity: hint
+    recommended: true
+    given: $..properties.[?(@.type=="integer")]
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - int32
+        - int64
+
+  openapi-v3-schema-properties-allowed-number-format:
+    description: Ensure only allowed number formats.
+    message: You must have format property of decimal32, decimal64, float, double, decimal128
+    formats:
+    - oas3
+    severity: hint
+    recommended: true
+    given: $..properties.[?(@.type=="number")]
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - decimal32
+        - decimal64
+        - float
+        - double
+        - decimal128
+
+  openapi-v3-schema-properties-define-array-boundaries:
+    description: Requires that arrays have their minimum and maximum boundaries defined.
+    message: Arrays must have minItems and maxItems defined.
+    formats:
+    - oas3
+    severity: warn
+    recommended: true
+    given:
+
+      - $..properties.*[?(@.type=="array")]
+      - $.components.properties.*[?(@.type=="array")]
+
+    then:
+
+    - field: maxItems
+      function: defined
+    - field: minItems
+      function: defined
+
+  openapi-v3-schema-properties-define-number-boundaries:
+    description: Ensures that all number properties have boundaries defined.
+    message: Numeric types need to have a minimum and maximum property defined.
+    formats:
+    - oas3
+    severity: warn
+    recommended: true
+    given:
+
+      - $.paths.*.properties.*[?(@.type=="number")]
+      - $.components.properties.*[?(@.type=="number")]
+
+    then:
+
+      - field: maximum
+        function: defined
+
+      - field: minimum
+        function: defined
+
+
+# Tags
+
+  openapi-v3-tags-object:
+    description: Ensuring that there are tags being applied.
+    message: You should have a central tags object.
+    given: "$"
+    severity: error
+    then:
+      field: tags
+      function: truthy
+
+  openapi-v3-tags-name:
+    description: Ensuring that all tags have a name.
+    message: All tags should have a name.
+    given: "$.tags[*]"
+    severity: error
+    then:
+      field: name
+      function: truthy
+
+  openapi-v3-tags-description:
+    description: Ensuring that all tags have a description.
+    message: All tags should have a description.
+    given: "$.tags[*]"
+    severity: error
+    then:
+      field: description
+      function: truthy
+
+  openapi-v3-tags-one:
+    description: Ensuring that there is at least on tag being applied.
+    message: You should have at least one tag.
+    given: "$"
+    severity: error
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+# Security
+
+  openapi-v3-security-schemes:
+    description: Security Schemes
+    message: There should be a security scheme defined.
+    documentationUrl: https://example.com
+    severity: info
+    given: "$.components"
+    then:
+      field: securitySchemes
+      function: truthy
+
+  openapi-v3-operation-security-definitions:
+    description: Operation Security Definitions
+    message: There should be security definitions for each operation.
+    documentationUrl: https://example.com
+    severity: info
+    given: "$.paths.*.*"
+    then:
+      field: security
+      function: truthy
+

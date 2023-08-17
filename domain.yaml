@@ -1,0 +1,86 @@
+name: Enterprise
+
+description: 'Need a simple description of the enterprise domain.'
+
+owners:
+
+    - pwho: Kin Lane
+      type: Primary
+
+categories:
+
+    - name: Portfolio
+      description: The management of portfolios.
+
+subcategories:
+
+    - name: Jobs
+      description: 'The description.'
+
+    - name: Data
+      description: 'The description.'
+
+    - name: Pre-Trade
+      description: 'The description.'
+
+    - name: Optimizations
+      description: 'The description.'
+
+tags:
+
+    - name: PORT
+      description: 'The description.'
+
+distributions:
+
+    - approval_date: YYYY-MM-DDTHH:MM:SS+0000
+      prqs_number: '12345'
+      distribution_channel: BDev
+
+policies:
+
+  - name: 'Intuitive Titles for APIs'
+  - name: 'Informative Description for APIs'
+
+products:
+
+    # Detail is below in the product schema
+    - name: Portfolio API
+      description: 'The description.'
+
+documents:
+
+    - name: 'Need Title'
+      description: 'The description.'
+      doc_url: https://example.com
+      type: 'Getting Started'
+
+medias:
+
+    - name: 'Need Title'
+      description: 'The description.'
+      media_url: https://example.com
+      type: 'Presentation'
+
+vocabularies:
+
+    - name: Domain Vocabulary
+      description: 'The description.'
+      media_url: https://example.com
+      type: 'JSON-LD | RDF | Microdata | Turtle | Triples'
+
+    - name: Domain Schema
+      description: Are there any XSD, JSON Schema or other artifacts that were used to design this API?
+      type: 'XSD | JSON Schema'
+      spec_url: http://example.com/
+      swagger_hub_url: http://example.com/
+
+feedback:
+
+    - name: What domains are in play?
+      type: issue
+      url: https://bbgithub.dev.bloomberg.com/webapi/portfolio/issues/1)
+
+    - name: SDSK Ticket
+      type: sdsk
+      url: SDSK 123456 GO

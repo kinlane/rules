@@ -1,0 +1,138 @@
+name: Whatever We Want
+description: 'This is the description.'
+
+domain: Enterprise
+
+bmds_product:
+
+    - id: '12345'
+      name: 'BMDS Product'
+
+owners:
+
+    - pwho: Kin Lane
+      type: Primary
+
+persona:
+
+  - name: Target Persona
+    description: A narrow demographic to target with this product.
+
+use_cases:
+
+    - name: Pre-Trade Optimizations
+      description: 'This is the description.'
+      capabilities:
+
+        - Retrieve Optimizations Constraints
+        - Retrieve Optimizations Datasets
+        - Create Optimizations Dataset
+        - Load Optimizations Dataset
+        - Update Optimizations Dataset
+        - Delete Optimizations Dataset
+        - Retrieve Optimizations Goals
+        - Retrieve Optimizations Results
+        - Send Optimizations
+        - Retrieve Optimizations Tasks
+        - Create Optimizations Task
+        - Retrieve Optimizations Task
+        - Update Optimizations Task
+        - Delete Optimizations Task
+
+specs:
+
+    - name: Pre-Trade Optimizations API
+      description: This is the OpenAPI for this product.
+      type: OpenAPI
+      spec_url: spec-pre-trade-optimizations.yml
+      swagger_hub_url: https://swaggerhub.dev.bloomberg.com/apis/Bloomberg_LP_Org/enterprise-reporting-data/v1.0.0
+
+routes:
+
+  - path: /enterprise/pre-trade/optimizations/
+  - path: /enterprise/pre-trade/optimizations/constraints
+  - path: /enterprise/pre-trade/optimizations/datasets
+  - path: /enterprise/pre-trade/optimizations/datasets/{name}
+  - path: /enterprise/pre-trade/optimizations/goals
+  - path: /enterprise/pre-trade/optimizations/results/{request_id}
+  - path: /enterprise/pre-trade/optimizations/tasks
+  - path: /enterprise/pre-trade/optimizations/tasks/{task_name}
+
+versions:
+
+    - major: '1'
+      minor: '0'
+      release_date: YYY-MM-dd
+      create_date: YYY-MM-dd
+      updated_uuid: ABC12345
+      type: 'Public'
+
+documents:
+
+    - name: 'Example Document'
+      description: 'Example Descripton'
+      doc_url: https://example.com
+      type: 'Blog'
+
+medias:
+
+    - name: 'Example Media'
+      description: 'Example Descripton'
+      media_url: https://example.com
+      type: 'Video | Webinar | Presentation'
+
+artifacts:
+
+    - type: SDK
+      artifact_url: https://example.com
+      language: 'Python'
+      metadata: 'Need metadata'
+
+regions:
+
+    - name: US
+
+policies:
+
+  - name: 'Intuitive Titles for APIs'
+  - name: 'Informative Description for APIs'
+
+scores:
+
+    - score: 0
+      score_date: YYYY-MM-DD
+
+providers:
+
+    - name: Provider One
+      description: This is the provider description.
+
+reviews:
+
+    - type: Product
+      approval_date: YYYY-MM-DD
+      prqs_number: '123'
+
+    - type: Schema
+      approval_date: YYYY-MM-DD
+      prqs_number: '123'
+
+    - type: REST
+      approval_date: YYYY-MM-DD
+      prqs_number: '123'
+
+    - type: GraphQL
+      approval_date: YYYY-MM-DD
+      prqs_number: '123'
+
+    - type: Security
+      approval_date: YYYY-MM-DD
+      prqs_number: '123'
+
+tags:
+
+    - name: Pre-Trade
+      description: 'Need Description'
+
+    - name: Optimizations
+      description: 'Need Description'

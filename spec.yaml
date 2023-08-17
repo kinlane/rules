@@ -1,0 +1,523 @@
+openapi: 3.0.0
+info:
+
+    # Describing the value the API provides
+    title: Organizations
+    description: This is a starter OpenAPI to learn the basics of RESTful API design using OpenAPI 3.0, providing access to set of API Paths for managing organizations via a simple intuitive API.
+
+    # Version of the API
+    version: 1.0.0
+
+    contact:
+      name: Kin Lane
+      url: https://bbgithub.dev.bloomberg.com/webapi/restful-api-standards
+      email: klane55@bloomberg.net
+
+    # Legal
+    license:
+      name: DATA<GO> Terms of Service
+      url: 'https://data.bloomberg.com/tos/'
+
+    termsOfService: 'https://www.bloomberg.com/notices/tos/'
+
+servers:
+
+  # Development and Product Servers
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://swaggerhub.dev.bloomberg.com/virts/klane55/starter/v1.0
+  - url: https://api.developer.example.com/
+    description: The server for working with this API in development.
+  - url: https://api.production.example.com/
+    description: The server for working with this API in production.
+
+tags:
+
+  - name: Organizations
+    description: 'An organizational entity.'
+
+paths:
+
+  '/bloomberg/organizations':
+
+    get:
+
+      summary: Search Organizations
+      description: 'Allows for searching across organizations using a keyword or phrase, and defining how many organizations you want to be returned.'
+
+      operationId: searchOrganizations
+
+      tags:
+
+        - Organizations
+
+      parameters:
+
+        # Authentication
+        - $ref: '#/components/parameters/jwt'
+
+        # Search
+        - $ref: '#/components/parameters/q'
+
+        # Pagintion
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_size'
+
+      responses:
+
+        '200':
+          description: Success
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: "#/components/schemas/Response"
+              example:
+                name: Test
+
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/400'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/404'
+        '500':
+          description: Internal Server
+          $ref: '#/components/responses/500'
+
+      security:
+        - jwt: []
+
+    post:
+
+      summary: 'Add Organization'
+      description: 'This operation allows you to add a new organization defined as JSON and submited as part of the request body.'
+
+      operationId: addOrganization
+
+      tags:
+
+        - Organizations
+
+      parameters:
+
+        # Authentication
+        - $ref: '#/components/parameters/jwt'
+
+      requestBody:
+        $ref: "#/components/requestBodies/Organization"
+
+      responses:
+
+        "201":
+          description: 201 response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+              example:
+                name: Test
+
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/400'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/404'
+        '500':
+          description: Internal Server
+          $ref: '#/components/responses/500'
+
+      security:
+        - jwt: []
+
+  '/bloomberg/organizations/{organization_id}':
+
+    get:
+
+      summary: 'Get Organization'
+      description: 'This operation returns a single organization using its unique identifier.'
+
+      operationId: getOrganization
+
+      tags:
+
+        - Organizations
+
+      parameters:
+        - name: organization_id
+          description: 'The unique identifier for the organizational entity.'
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+              example:
+                name: Test
+
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/400'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/404'
+        '500':
+          description: Internal Server
+          $ref: '#/components/responses/500'
+
+      security:
+        - jwt: []
+
+    put:
+      summary: 'Update Organization'
+      description: 'This operation updates a single organization using its unique identifier, and JSON submited as request body.'
+      operationId: updateOrganization
+
+      tags:
+
+        - Organizations
+
+      parameters:
+        - name: organization_id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        $ref: "#/components/requestBodies/Organization"
+
+      responses:
+
+        '204':
+          description: 204 response
+
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/400'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/404'
+        '500':
+          description: Internal Server
+          $ref: '#/components/responses/500'
+
+      security:
+        - jwt: []
+
+    delete:
+
+      summary: 'Delete Organization'
+      description: 'This operation deketes a single organization using its unique identifier.'
+
+      operationId: deleteOrganization
+
+      tags:
+
+        - Organizations
+
+      parameters:
+        - name: organization_id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: 204 response
+
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/400'
+        '401':
+          description: Unauthorized
+          $ref: '#/components/responses/401'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/404'
+        '500':
+          description: Internal Server
+          $ref: '#/components/responses/500'
+
+      security:
+        - jwt: []
+
+# These are centralized components referenced and reused across this definition.
+components:
+
+  securitySchemes:
+
+    jwt:
+      type: http
+      scheme: JWT
+
+  parameters:
+
+    # Authentication
+    jwt:
+      name: jwt
+      in: header
+      description: 'JWT(https://tools.ietf.org/html/rfc7519) Authentication token'
+      required: true
+      schema:
+        type: string
+      example:
+        name: filler
+
+    # Querying
+    q:
+      name: q
+      in: query
+      description: 'The search term to search organizations by using this operation.'
+      required: false
+      schema:
+        type: string
+      example:
+        name: filler
+
+    # Pagination
+    sort:
+      name: sort
+      in: query
+      description: 'Field to sort by. Accepted are relevance, title and -title.'
+      required: false
+      schema:
+        type: string
+      example:
+        name: filler
+    page:
+      name: page
+      in: query
+      description: 'Page number to with any particular request being made.'
+      required: false
+      schema:
+        type: integer
+      example:
+        name: filler
+    page_size:
+      name: page_size
+      in: query
+      description: 'Number of items per page. Defaults to 20 if not supplied.'
+      required: false
+      schema:
+        type: integer
+      example:
+        name: filler
+
+  # Standards error responses reused across all operations
+  responses:
+
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+          example:
+            statusCode: 400
+            title: Bad Request
+            description: The browser (or proxy) sent a request that this server could not understand.
+            errors: []
+
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+          example:
+            statusCode: 401
+            title: Unauthorized
+            description: 'The request has not been processed because it lacks valid authentication credentials for the target resource.'
+            errors: []
+
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+          example:
+            statusCode: 404
+            title: Not Found
+            description: The requested URL was not found on the server.
+            errors: []
+
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
+          example:
+            statusCode: 500
+            title: Internal Server Error
+            description: 'An error occurred while processing this request. Please follow best practices to retry this request.'
+            errors: []
+
+  # Reused by POST and PUT requests
+  requestBodies:
+
+    Organization:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Organization"
+      required: true
+
+  schemas:
+
+    # JSON Schema for an organization
+    Organization:
+      type: object
+      description: 'An organizational entity object.'
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the organizational entity.
+          minLength: 5
+          maxLength: 250
+        description:
+          type: string
+          description: The description of the organizational entity.
+          minLength: 50
+          maxLength: 1000
+        url:
+          type: string
+          description: The URL of the organizational entity.
+          minLength: 10
+          maxLength: 2048
+        email:
+          type: string
+          description: The email of the organizational entity.
+          minLength: 5
+          maxLength: 320
+        logo:
+          type: string
+          description: The logo of the organizational entity.
+          minLength: 10
+          maxLength: 2048
+
+    # JSON API standardized response
+    Response:
+      type: object
+      description: 'An JSON API object with metadata, data, and links, providing a wrapper for all search responses.'
+      properties:
+        meta:
+          type: object
+          description: 'The metadata for the object.'
+          properties:
+            sort:
+              type: integer
+              description: The property to sort the response by.
+            page:
+              type: integer
+              description: The page to return with response.
+            pageSize:
+              type: integer
+              description: The page size being returned.
+            totalPages:
+              type: integer
+              description: The total number of pages.
+          required:
+           - totalPages
+           - page
+           - limit
+        data:
+          type: array
+          items:
+              oneOf:
+                - $ref: '#/components/schemas/Organization'
+          description: 'Listing or an individual object.'
+        links:
+          type: object
+          description: 'A set of referential links for the object.'
+          properties:
+            self:
+              type: string
+              description: A link to itself.
+            first:
+              type: string
+              description: A link to first record.
+            prev:
+              type: string
+              description: A link to previous record.
+            next:
+              type: string
+              description: A link to next record.
+            last:
+              type: string
+              description: A link to last record.
+          required:
+          - self
+      required:
+      - meta
+      - data
+      - links
+
+    # Status for use across errors
+    Status:
+      type: object
+      description: 'The status of the request.'
+      required:
+        - error
+        - error_descripton
+        - errors
+      properties:
+        error:
+          type: string
+          description: A brief error statement.
+        error_description:
+          type: string
+          description: A more detailed error statement.
+        errors:
+          $ref: '#/components/schemas/Errors'
+          description: The actual list of errors.
+
+    # JSON API Errors
+    Errors:
+      type: array
+      description: 'A collection of errors that conform to the [JSON:API standard](https://jsonapi.org/format/#error-objects).'
+      minItems: 0
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/Error'
+
+    Error:
+      type: object
+      description: 'The error object.'
+      properties:
+        status:
+          type: integer
+          description: The HTTP status code.
+        errorCode:
+          type: string
+          description: The HTTP status phrase.
+        title:
+          type: string
+          description: A brief statement of the error.
+        detail:
+          type: string
+          description: A detailed statement of the error.

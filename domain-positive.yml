@@ -1,0 +1,356 @@
+# Domain Rules
+# These are Spectral rules that get applied at the domain scope, walking through what needs to be done when building a domain, but then also linting the end result to ensure a compliant schema.
+extends: [[spectral:oas, off]]
+
+rules:
+
+  #------------------
+  # Policy - Domain - Name
+  #------------------
+
+  domain-v1-name:
+    description: Domain Name
+    message: You have a name for the domain.
+    given: "$"
+    severity: info
+    recommended: true
+    type: style
+    then:
+      field: name
+      function: falsy
+
+  domain-v1-name-upper-case:
+    description: Domain Name Upper Case
+    message: The domain name is upper case.
+    given: "$.name"
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^[A-Z][a-z]*(?: [A-Z][a-z]*)*$"
+    type: style
+    recommended: true
+    severity: info
+
+  domain-v1-name-max-length:
+    description: Domain Name Max Length
+    message: The domain name is not too long.
+    given: "$"
+    severity: info
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: name
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Domain - Description
+  #------------------
+
+  domain-v1-description:
+    description: Domain Description
+    message: The domain has a description.
+    given: "$"
+    severity: info
+    recommended: true
+    type: style
+    then:
+      field: description
+      function: falsy
+
+  domain-v1-description-max-length:
+    description: Domain Description Max Length
+    message: The domain description is not too long.
+    given: "$"
+    severity: info
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Domain - Owners
+  #------------------
+
+  domain-v1-owners:
+
+    description: Owners
+    message: There is an owners object.
+    severity: info
+    given: "$"
+    then:
+    - field: owners
+      function: falsy
+
+  domain-v1-owners-one:
+
+    description: Owners One
+    message: There is one owner.
+    given: "$"
+    severity: info
+    then:
+      field: owners
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-owners-pwho:
+
+    description: Owners PWHO
+    message: Owners have a PWHO.
+    severity: info
+    given: "$.owners.*"
+    then:
+    - field: pwho
+      function: falsy
+
+  #------------------
+  # Policy - Domain - Categories
+  #------------------
+
+  domain-v1-categories:
+
+    description: Categories
+    message: There is a categories property.
+    severity: info
+    given: "$"
+    then:
+    - field: categories
+      function: falsy
+
+  domain-v1-categories-one:
+
+    description: Categories One
+    message: There is at least one category.
+    given: "$"
+    severity: info
+    then:
+      field: categories
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Domain - Sub Categories
+  #------------------
+
+  domain-v1-subcategories:
+
+    description: SubCategories
+    message: There is a subcategories object.
+    severity: info
+    given: "$"
+    then:
+    - field: subcategories
+      function: falsy
+
+  domain-v1-subcategories-one:
+
+    description: SubCategories One
+    message: There is one subcategory.
+    given: "$"
+    severity: info
+    then:
+      field: subcategories
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Domain - Tags
+  #------------------
+
+  domain-v1-tags:
+
+    description: Tags
+    message: There is a tag object.
+    severity: info
+    given: "$"
+    then:
+    - field: tags
+      function: falsy
+
+  domain-v1-tags-one:
+
+    description: Tags One
+    message: There is one tag.
+    given: "$"
+    severity: info
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Domain - Distributions
+  #------------------
+
+  domain-v1-distributions:
+
+    description: Distributions
+    message: There is a distributions object.
+    severity: info
+    given: "$"
+    then:
+    - field: distributions
+      function: falsy
+
+  domain-v1-distributions-one:
+
+    description: Distributions One
+    message: There is one distribution.
+    given: "$"
+    severity: info
+    then:
+      field: distributions
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-distributions-pwho:
+
+    description: Distributions PRQS Number
+    message: Distributions have a prqs_number.
+    severity: info
+    given: "$.distributions.*"
+    then:
+    - field: prqs_number
+      function: falsy
+
+ #------------------
+  # Policy - Domain - Policies
+  #------------------
+
+  domain-v1-policies:
+
+    description: Policies
+    message: There is a policies object.
+    severity: info
+    given: "$"
+    then:
+    - field: policies
+      function: falsy
+
+  domain-v1-policies-one:
+
+    description: Policies One
+    message: There is a policy.
+    given: "$"
+    severity: info
+    then:
+      field: policies
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Domain - Products
+  #------------------
+
+  domain-v1-products:
+
+    description: Products
+    message: There is a products object.
+    severity: info
+    given: "$"
+    then:
+    - field: products
+      function: falsy
+
+  domain-v1-products-one:
+
+    description: Products One
+    message: There is a product.
+    given: "$"
+    severity: info
+    then:
+      field: products
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Domain - Documents
+  #------------------
+
+  domain-v1-documents:
+
+    description: Documents
+    message: There is a documents object.
+    severity: info
+    given: "$"
+    then:
+    - field: documents
+      function: falsy
+
+  domain-v1-documents-one:
+
+    description: Documents One
+    message: There is one document.
+    given: "$"
+    severity: info
+    then:
+      field: documents
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-documents-name:
+
+    description: Documents Name
+    message: Each document should have a name.
+    severity: info
+    given: "$.documents.*"
+    then:
+    - field: name
+      function: falsy
+
+  domain-v1-documents-description:
+
+    description: Documents Description
+    message: Each document should have a description.
+    severity: info
+    given: "$.documents.*"
+    then:
+    - field: description
+      function: falsy
+
+  domain-v1-documents-type:
+
+    description: Documents Type
+    message: Each document should have a type.
+    severity: info
+    given: "$.documents.*"
+    then:
+    - field: type
+      function: falsy
+
+  domain-v1-documents-type-specific:
+
+    description: Documents Type
+    message: There is getting started or functional document.
+    severity: info
+    given: "$.documents.*"
+    then:
+
+      - field: type
+        function: pattern
+        functionOptions:
+          notMatch: /^(Getting Started|Functional)$/i

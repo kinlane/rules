@@ -1,0 +1,360 @@
+# Domain Rules
+# These are Spectral rules that get applied at the domain scope, walking through what needs to be done when building a domain, but then also linting the end result to ensure a compliant schema.
+extends: [[spectral:oas, off]]
+
+rules:
+
+  #------------------
+  # Policy - Domain - Name
+  #------------------
+
+  domain-v1-name:
+    description: Domain Name
+    message: A domain should have a descriptive name.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: name
+      function: truthy
+
+  domain-v1-name-upper-case:
+    description: Domain Name Upper Case
+    message: The domain name needs have the first letter of each word upper case.
+    given: "$.name"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-z]*(?: [A-Z][a-z]*)*$"
+    type: style
+    recommended: true
+    severity: error
+
+  domain-v1-name-max-length:
+    description: Domain Name Max Length
+    message: The domain name should not be more than 50 characters.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: name
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Domain - Description
+  #------------------
+
+  domain-v1-description:
+    description: Domain Description
+    message: A domain should have a descriptive description.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    then:
+      field: description
+      function: truthy
+
+  domain-v1-description-max-length:
+    description: Domain Description Max Length
+    message: The domain description should not be more than 50 characters.
+    given: "$"
+    severity: error
+    recommended: true
+    type: style
+    formats:
+    - oas3
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 50
+
+  #------------------
+  # Policy - Domain - Owners
+  #------------------
+
+  domain-v1-owners:
+
+    description: Owners
+    message: There should be an owners property.
+    severity: error
+    given: "$"
+    then:
+    - field: owners
+      function: truthy
+
+  domain-v1-owners-one:
+
+    description: Owners One
+    message: There should be at least one owner.
+    given: "$"
+    severity: error
+    then:
+      field: owners
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-owners-pwho:
+
+    description: Owners PWHO
+    message: Each owner should have a pwho property.
+    severity: error
+    given: "$.owners.*"
+    then:
+    - field: pwho
+      function: truthy
+
+  #------------------
+  # Policy - Domain - Categories
+  #------------------
+
+  domain-v1-categories:
+
+    description: Categories
+    message: There should be an categories property.
+    severity: error
+    given: "$"
+    then:
+    - field: categories
+      function: truthy
+
+  domain-v1-categories-one:
+
+    description: Categories One
+    message: There should be at least one category.
+    given: "$"
+    severity: error
+    then:
+      field: categories
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Domain - Sub Categories
+  #------------------
+
+  domain-v1-subcategories:
+
+    description: SubCategories
+    message: There should be an subcategories property.
+    severity: error
+    given: "$"
+    then:
+    - field: subcategories
+      function: truthy
+
+  domain-v1-subcategories-one:
+
+    description: SubCategories One
+    message: There should be at least one subcategory.
+    given: "$"
+    severity: error
+    then:
+      field: subcategories
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Domain - Tags
+  #------------------
+
+  domain-v1-tags:
+
+    description: Tags
+    message: There should be an tags property.
+    severity: error
+    given: "$"
+    then:
+    - field: tags
+      function: truthy
+
+  domain-v1-tags-one:
+
+    description: Tags One
+    message: There should be at least one tag.
+    given: "$"
+    severity: error
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Domain - Distributions
+  #------------------
+
+  domain-v1-distributions:
+
+    description: Distributions
+    message: There should be an distributions property.
+    severity: error
+    given: "$"
+    then:
+    - field: distributions
+      function: truthy
+
+  domain-v1-distributions-one:
+
+    description: Distributions One
+    message: There should be at least one distribution.
+    given: "$"
+    severity: error
+    then:
+      field: distributions
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-distributions-pwho:
+
+    description: Distributions PRQS Number
+    message: Each distribution should have a prqs_number property.
+    severity: error
+    given: "$.distributions.*"
+    then:
+    - field: prqs_number
+      function: truthy
+
+ #------------------
+  # Policy - Domain - Policies
+  #------------------
+
+  domain-v1-policies:
+
+    description: Policies
+    message: There should be an policies property.
+    severity: error
+    given: "$"
+    then:
+    - field: policies
+      function: truthy
+
+  domain-v1-policies-one:
+
+    description: Policies One
+    message: There should be at least one policies.
+    given: "$"
+    severity: error
+    then:
+      field: policies
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+ #------------------
+  # Policy - Domain - Products
+  #------------------
+
+  domain-v1-products:
+
+    description: Products
+    message: There should be an products property.
+    severity: error
+    given: "$"
+    then:
+    - field: products
+      function: truthy
+
+  domain-v1-products-one:
+
+    description: Products One
+    message: There should be at least one products.
+    given: "$"
+    severity: error
+    then:
+      field: products
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  #------------------
+  # Policy - Domain - Documents
+  #------------------
+
+  domain-v1-documents:
+
+    description: Documents
+    message: There should be an documents property.
+    severity: error
+    given: "$"
+    then:
+    - field: documents
+      function: truthy
+
+  domain-v1-documents-one:
+
+    description: Documents One
+    message: There should be at least one documents.
+    given: "$"
+    severity: error
+    then:
+      field: documents
+      function: length
+      functionOptions:
+        min: 1
+    type: style
+
+  domain-v1-documents-name:
+
+    description: Documents Name
+    message: Each document should have a name.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: name
+        function: truthy
+
+  domain-v1-documents-description:
+
+    description: Documents Description
+    message: Each document should have a description.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: description
+        function: truthy
+
+  domain-v1-documents-type:
+
+    description: Documents Type
+    message: Each document should have a type.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: type
+        function: truthy
+
+  domain-v1-documents-type-specific:
+
+    description: Documents Type
+    message: There is getting started or functional document.
+    severity: error
+    given: "$.documents.*"
+    then:
+
+      - field: type
+        function: pattern
+        functionOptions:
+          match: /^(Getting Started|Functional)$/i
+
